@@ -1,0 +1,133 @@
+.background{
+  background-image: url('/images/pancakes.jpeg');
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: -1;
+  /*filter: url(#svg-blur);
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  /*filter: blur(5px);*/
+}
+
+.container{
+  display: table;
+}
+
+.site-inner{
+  display: table-cell;
+  padding: 185px 230px 230px;
+}
+
+
+.cover-container{
+  width: 700px;
+}
+
+.cover-container .cover-back{
+  height: 240px;
+  opacity: 0.5;
+  background: #000;
+  border-radius: 6px;
+  margin-top: -155px;
+}
+
+.inner{
+  padding: 30px;
+}
+
+.cover{
+  padding: 0 20px;
+  text-align: center;
+  position: relative;
+  top: 66px;
+  z-index: 1;
+}
+
+.cover h1, p{
+  color: #fff;
+
+}
+
+.cover .btn{
+  vertical-align: baseline;
+}
+
+input[name^="email"]{
+  color: #000;
+  font-family: Arial;
+  height: 40px;
+}
+
+.button-bar{
+  margin-top: 20px;
+}
+
+.btn.btn-lg.btn-primary.fileupload-btn{
+  overflow : hidden;
+  position : relative;
+}
+
+.btn.btn-lg.btn-primary.fileupload-btn input{
+   cursor: pointer;
+   direction: ltr;
+   font-size: 200px;
+   margin: 0;
+   opacity: 0;
+   position: absolute;
+   right: 0;
+   top: 0;
+}
+
+.preview{
+  display: inline;
+  height: 80px;
+}
+
+.progress {
+  position: relative;
+  margin: 80px 20px 50px 15px;
+  height: 14px;
+}
+
+.col-md-4{
+  padding-bottom: 10px;
+}
+
+.pic-actions {
+  height: 30px;
+  position: relative;
+  margin: -36px 12px 5px 5px;
+  background: #000;
+  opacity: 0.5;
+}
+
+.glyphicon.glyphicon-trash
+{
+  font-size: 20px;
+  float: right;
+  padding: 5px;
+}
+
+.pic-actions a:hover {
+  text-decoration: none;
+}
+
+.modal-image{
+  height: 35%;
+}
+
+.modal-image span.preview{
+  float: left;
+  padding-right: 25px;
+}
+
+button#uploader{
+  float: left;
+}
+
+textarea#caption{
+  width: 60%;
+}

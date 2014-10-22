@@ -1,0 +1,12 @@
+<div id="<%=cid%>" data-model="<%=cid%>" class="col-md-4">
+  <!--<div id="progress" class="progress">
+        <div class="progress-bar progress-bar-success"></div>
+  </div>-->
+  <span class="preview"><img alt="200x200" class="img-thumbnail" data-src="holder.js/200x200" style="width: 200px; height: 200px;" src="<%=fileSource%>"></span>
+  <div id="pic-actions-<%=cid%>" class="pic-actions">
+    <a id="delete" data-model="<%=cid%>" style="cursor: pointer;"><span class="glyphicon glyphicon-trash"></span></a>
+  </div>
+  <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="display:none;">
+    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+  </div>
+</div>

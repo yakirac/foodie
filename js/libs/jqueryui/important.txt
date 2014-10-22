@@ -1,0 +1,6 @@
+jquery-ui.js
+
+All edits are prefixed with a comment beginning with "//MCEDIT:"
+
+1) line 1719
+2) line 4711
