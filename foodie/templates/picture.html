@@ -1,12 +1,29 @@
-<div id="<%=cid%>" data-model="<%=cid%>" class="col-md-4">
+<!--<div id="<%=cid%>" data-model="<%=cid%>" class="col-md-4">-->
   <!--<div id="progress" class="progress">
         <div class="progress-bar progress-bar-success"></div>
   </div>-->
-  <span class="preview"><img alt="200x200" class="img-thumbnail" data-src="holder.js/200x200" style="width: 200px; height: 200px;" src="<%=fileSource%>"></span>
+<!--  <span class="preview"><img alt="200x200" class="img-thumbnail" data-src="holder.js/200x200" style="width: 200px; height: 200px;" src="<%=fileSource%>"></span>
   <div id="pic-actions-<%=cid%>" class="pic-actions">
     <a id="delete" data-model="<%=cid%>" style="cursor: pointer;"><span class="glyphicon glyphicon-trash"></span></a>
   </div>
   <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="display:none;">
     <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+  </div>
+</div>-->
+
+
+<div id="<%=cid%>" data-model="<%=cid%>" class="col-md-4">
+  <div class="thumbnail">
+    <!--<img class="img-thumbnail" data-src="holder.js/300x300" alt="200x200" src="">-->
+    <a href="#loadpic/<%=cid%>"><img alt="200x200" class="img-thumbnail" data-src="holder.js/100%x200" style="width: 100%; height: 200px;" src="<%=fileSource%>"></a>
+    <div class="caption">
+      <!--<h3>Thumbnail label</h3>-->
+      <p class="caption-text"><%=caption%></p>
+      <!--<p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>-->
+      <!--<div id="pic-actions-<%=cid%>" class="pic-actions">-->
+        <!--<p><a id="delete" data-model="<%=cid%>" style="cursor: pointer;"><span class="glyphicon glyphicon-trash"></span></a></p>-->
+      <!--</div>-->
+    </div>
+    <p><a id="delete" data-model="<%=cid%>" style="cursor: pointer;"><span class="glyphicon glyphicon-trash"></span></a></p>
   </div>
 </div>

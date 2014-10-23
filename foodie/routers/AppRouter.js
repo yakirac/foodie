@@ -6,12 +6,12 @@
 define([
 	"jquery", "underscore", "backbone", "parse", "collections/Meals",
 	"views/HeaderView", "views/MainAppView", "views/AboutView", "views/FoodPicsView",
-	"views/MainMarionetteApp"
+	"views/FoodPicView", "views/MainMarionetteApp"
 	],
 
     function(
     	$, _, Backbone, Parse, Meals, HeaderView, MainAppView, AboutView,
-			FoodPicsView, MarionetteApp
+			FoodPicsView, FoodPicView, MarionetteApp
     )
     {
 
@@ -52,6 +52,7 @@ define([
                 ''								: 'index',		//main loader route
                 //'about'						: 'about',
 								'loadpics'				: 'loadpics',
+								'loadpic/:id'					: 'loadpic',
                 '*notFound'				: 'index'		//catch all*/
             },
 
@@ -94,6 +95,21 @@ define([
 								var foodPicsView = new FoodPicsView({ mealCollection : meals });
 
 								foodieApp.mainRegion.show(foodPicsView);
+							});
+						},
+						loadpic : function( id )
+						{
+							if(!this.parseInitialized) this.parseInitialized = this.initializeParse();
+							var Meal = Parse.Object.extend("Meal");
+							var query = new Parse.Query(Meal);
+							query.get(id, {
+								success : function( meal ){
+									var foodPicView = new FoodPicView({ model : meal });
+									foodieApp.mainRegion.show(foodPicView);
+								},
+								error : function( object, error ){
+									console.log('There was an error retriving the meal');
+								}
 							});
 						}
         });

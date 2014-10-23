@@ -40,7 +40,8 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
               'click #uploader'     : 'openFileBrowser',
               'change #fileupload'  : 'uploadPhoto',
               'click #save'         : 'uploadMeal',
-              'click #delete'       : 'deletePhoto'
+              'click #delete'       : 'confirmDelete',
+              'click #ok'           : 'deletePhoto'
             },
 
             render: function() {
@@ -53,7 +54,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
                 console.log(this.savedMeals);
 
                 _.each(this.savedMeals.models, function(meal, idx){
-                  this.$el.find('#pictures').append(_.template(pictureTemplate, {cid : meal.id, fileSource : meal.get('file')._url }));
+                  this.$el.find('#pictures').append(_.template(pictureTemplate, {cid : meal.id, fileSource : meal.get('file')._url, caption : meal.get('caption') }));
                 }.bind(this));
               }
               else
@@ -116,7 +117,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
             {
               console.log('Opening the modal on this click', event);
 
-              this.$('#myModal').modal({ show : true });
+              this.$('#uploadModal').modal({ show : true });
 
               event.preventDefault();
             },
@@ -169,17 +170,24 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
                 }
                 var newModel = self.savedMeals.add( newMeal );
 
-                $('#pictures').append(_.template(pictureTemplate, { cid : newMeal.id, fileSource : self.parseFile._url }));
+                $('#pictures').append(_.template(pictureTemplate, { cid : newMeal.id, fileSource : self.parseFile._url, caption : newMeal.get('caption') }));
 
-                this.$('#myModal').modal('hide');
+                this.$('#uploadModal').modal('hide');
 
               }, function( error ){
                 console.log('There was an error saving the FoodieFile', error);
               });
             },
 
+            confirmDelete : function()
+            {
+              this.$('#delConfModal').modal({ show : true });
+            },
+
             deletePhoto : function( event )
             {
+              this.$('#delConfModal').modal('hide');
+
               var $elem = $(event.currentTarget),
                   divModel = $elem.data('model'),
                   mealModel = this.savedMeals.get( divModel );

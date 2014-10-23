@@ -44,6 +44,7 @@ else
 <link type="text/css" rel="stylesheet" href="/css/foodie.css">
 <link type="text/css" rel="stylesheet" href="<?= $js_path; ?>libs/bootstrap/css/bootstrap.css">
 
+<script src="http://imsky.github.com/holder/holder.js"></script>
 <script type="text/javascript" data-main="<?= $app_path ?>configs/config.paths.js" src="/js/libs/require/require.min.js" async="true"></script>
 <!--<div class="header"></div>-->
 

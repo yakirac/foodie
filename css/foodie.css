@@ -107,7 +107,6 @@ input[name^="email"]{
 .glyphicon.glyphicon-trash
 {
   font-size: 20px;
-  float: right;
   padding: 5px;
 }
 
@@ -130,4 +129,8 @@ button#uploader{
 
 textarea#caption{
   width: 60%;
+}
+
+.caption-text{
+  color: #000;
 }
