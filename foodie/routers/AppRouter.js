@@ -52,7 +52,8 @@ define([
                 ''								: 'index',		//main loader route
                 //'about'						: 'about',
 								'loadpics'				: 'loadpics',
-								'loadpic/:id'					: 'loadpic',
+								'loadpic/:id'			: 'loadpic',
+								'logout'					: 'logout',
                 '*notFound'				: 'index'		//catch all*/
             },
 
@@ -111,6 +112,15 @@ define([
 									console.log('There was an error retriving the meal');
 								}
 							});
+						},
+						logout : function()
+						{
+							console.log('Logging out');
+							if(!this.parseInitialized) this.parseInitialized = this.initializeParse();
+
+							var mainView = new MainAppView();
+
+							foodieApp.mainRegion.show(mainView);
 						}
         });
 
@@ -131,7 +141,7 @@ define([
 
 
 
-
+				bootstrap.router = MainRouter;
 
         return MainRouter;
     }

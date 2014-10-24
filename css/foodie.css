@@ -104,7 +104,25 @@ input[name^="email"]{
   opacity: 0.5;
 }
 
+a#delete, a#favorite{
+  color: #000;
+}
+
+a#favorite:hover {
+    text-decoration: none;
+}
+
+span#fave-count{
+  font-size: 16px;
+}
 .glyphicon.glyphicon-trash
+{
+  font-size: 20px;
+  padding: 5px 5px 5px 128px;
+}
+
+.glyphicon.glyphicon-star,
+.glyphicon.glyphicon-star-empty
 {
   font-size: 20px;
   padding: 5px;
@@ -133,4 +151,22 @@ textarea#caption{
 
 .caption-text{
   color: #000;
+}
+
+
+div#loginModal .modal-dialog,
+div#signUpModal .modal-dialog{
+  width: 350px;
+}
+
+.user_name{
+  margin-bottom: 12px;
+}
+
+.user_email{
+  margin-bottom: 12px;
+}
+
+.user_password{
+  margin-bottom: 35px;
 }

@@ -22,13 +22,16 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
               //bind methods to listen to and set THIS as the context
               _.bindAll( this, 'render', 'close');
 
+              this.inProfileView = true;
               this.savedMeals = this.options.mealCollection;
 
               this.FoodieMeal = Parse.Object.extend("Meal");
 
               //this.savedMeals = new Meals(bootstrap.images.files);
 
-              this.$el.html( _.template( template, {} ) );
+              this.currentUser = Parse.User.current();
+
+              this.$el.html( _.template( template, { name : this.currentUser ? this.currentUser.get('name') : 'Guest' } ) );
 
               //this.render();
 
@@ -41,7 +44,9 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
               'change #fileupload'  : 'uploadPhoto',
               'click #save'         : 'uploadMeal',
               'click #delete'       : 'confirmDelete',
-              'click #ok'           : 'deletePhoto'
+              'click #ok'           : 'deletePhoto',
+              'click #favorite'     : 'addRemoveFavorite',
+              'click #logout'       : 'logout'
             },
 
             render: function() {
@@ -54,7 +59,12 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
                 console.log(this.savedMeals);
 
                 _.each(this.savedMeals.models, function(meal, idx){
-                  this.$el.find('#pictures').append(_.template(pictureTemplate, {cid : meal.id, fileSource : meal.get('file')._url, caption : meal.get('caption') }));
+                  var data = { cid : meal.id,
+                               fileSource : meal.get('file')._url,
+                               caption : meal.get('caption'),
+                               profileView : this.inProfileView
+                             };
+                  this.$el.find('#pictures').append(_.template(pictureTemplate, data ));
                 }.bind(this));
               }
               else
@@ -62,46 +72,6 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
                 console.log('Showing the alert');
                 $('#no-photos').show();
               }
-
-              /*this.$('#fileupload').fileupload({
-                  url: 'uploadfiles.php',
-                  dataType : 'json',
-                  add : function(e, data){
-                    $('#pictures').append(_.template(pictureTemplate, { cid : "temp", fileSource : "" }));
-                    $('#temp').find('.preview').css({ "display" : "block" });
-                    $('#temp').find('.progress').show();
-                    data.submit()
-                    .success( function( result, status, jqXHR ){
-                      console.log('Success', self);
-                      if(!_.isUndefined(result.files))
-                      {
-                        _.each(result.files, function(file, idx){
-                          if($('#no-photos').is(":visible"))
-                          {
-                            $('#no-photos').hide();
-                          }
-                          $('#temp').remove();
-                          var newModel = self.savedMeals.add({ file_name : file.name });
-                          $('#pictures').append(_.template(pictureTemplate, { cid : newModel.cid, fileSource : file.path }));
-                        });
-                      }
-
-                    })
-                    .error( function( result, status, jqXHR ){
-                      console.log('Error', status);
-                    })
-                    .complete( function( result, status, jqXHR ){
-                    });
-                  },
-                  done : function(e, data){
-                    console.log(data);
-                  },
-                  progressall : function(e, data){
-                    var progress = parseInt(data.loaded / data.total * 100, 10);
-                    $('#temp').find('.progress-bar').css('width', progress + '%');
-                    console.log('The progress data', progress);
-                  }
-              });*/
 
 
               return this;
@@ -137,10 +107,6 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
               var name = 'photo.' + file.name.substring(file.name.lastIndexOf('.') + 1);
 
               this.parseFile = new Parse.File(name, file);
-
-              /*parseFile.save.addEventListener("progress", function( e ){
-                console.log('Progress', e);
-              });*/
 
               this.parseFile.save().then(function(){
                 console.log('The file was saved', self.parseFile);
@@ -198,6 +164,40 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
               this.render();
 
               //this.$('div#' + divModel).remove();
+            },
+            addRemoveFavorite : function( event ){
+              var $elem = $(event.currentTarget),
+                  divModel = $elem.data('model'),
+                  mealModel = this.savedMeals.get( divModel );
+
+              var likes = mealModel.get('favorites');
+
+              if(!this.inProfileView && this.currentUser)
+              {
+                  if(!_.contains(likes, this.currentUser.id))
+                  {
+                    //likes.push( this.currentUser.id );
+                    mealModel.add("favorites", this.currentUser.id);
+                    mealModel.save();
+                    //Call if adding like for user
+                    $elem.find('span').removeClass('glyphicon-star-empty').addClass('glyphicon-star');
+                    $elem.find('span#fave-count').html(likes.length);
+                  }
+                  else
+                  {
+                    //likes.push( this.currentUser.id );
+                    mealModel.remove("favorites", this.currentUser.id);
+                    mealModel.save();
+                    //Call if removing like for user
+                    $elem.removeClass('glyphicon-star').addClass('glyphicon-star-empty').removeClass('glyphicon-star');
+                    $elem.find('span#fave-count').html(likes.length);
+                  }
+              }
+            },
+            logout : function( event )
+            {
+              Parse.User.logOut();
+              bootstrap.router.navigate('#', { trigger : true });
             }
         });
 

@@ -24,6 +24,9 @@
         <!--<p><a id="delete" data-model="<%=cid%>" style="cursor: pointer;"><span class="glyphicon glyphicon-trash"></span></a></p>-->
       <!--</div>-->
     </div>
-    <p><a id="delete" data-model="<%=cid%>" style="cursor: pointer;"><span class="glyphicon glyphicon-trash"></span></a></p>
+    <p>
+      <a id="favorite" data-model="<%=cid%>" style="cursor: pointer;"><span class="glyphicon glyphicon-star-empty"></span><span id="fave-count">5</span></a>
+      <a id="delete" data-model="<%=cid%>" style="cursor: pointer; <%if(!profileView){%> display:none; <%}%>"><span class="glyphicon glyphicon-trash"></span></a>
+    </p>
   </div>
 </div>

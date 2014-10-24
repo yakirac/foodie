@@ -1,0 +1,100 @@
+<!--<p>
+	<h2>Welcome to the beginning of something beautiful</h2>
+</p>-->
+<!-- Main component for a primary marketing message or call to action -->
+<!--<div class="jumbotron">
+  <h1>Cooking Something Delicious</h1>
+  <p>
+  	Creating some of the most interesting recipes that will be sure to tantalize your taste buds. Click below to stay updated on upcoming dishes.
+  </p>
+  <p>
+    <a class="btn btn-lg btn-primary" href="#" role="button">Keep Me Updated</a>
+  </p>
+</div>-->
+
+<div class="cover-container">
+  <p><a href="#loadpics">[Enter]</a></p>
+  <div id="loginSignup">
+    <button id="log-in" type="button" class="btn btn-default">Log In</button>
+    <button id="sign-up" type="button" class="btn btn-primary">Sign Up</button>
+  </div>
+  <div class="inner cover">
+    <h1 class="cover-heading">Cooking Something Delicious</h1>
+    <p class="lead">
+      Creating passion-filled recipes that will be sure to tantalize
+      your taste buds. Sign up below to stay updated on upcoming dishes.
+    </p>
+    <p class="lead">
+      <input type="email" placeholder="Email" name="email">
+      <a class="btn btn-lg btn-primary" href="#" role="button">Keep Me Updated</a>
+    </p>
+  </div>
+  <div class="cover-back"></div>
+</div>
+
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Log In to Foodie</h4>
+      </div>
+      <div class="modal-body">
+        <div id="login-container">
+          <!--<input class="form-control" type="email" autofocus="" required="" placeholder="Email">-->
+          <!--<input class="form-control" type="password" required="" placeholder="Password">-->
+          <div id="login-errors" class="alert alert-danger" role="alert" style="display:none;"></div>
+          <form class="form-signin" role="form">
+            <div class="user_email">
+              <input id="login-email" class="form-control" type="email" autofocus="" required="" placeholder="Email">
+            </div>
+            <div class="user_password">
+              <input id="login-password" class="form-control" type="password" required="" placeholder="Password">
+            </div>
+            <button id="login" class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
+          </form>
+        </div>
+        <!--<div>
+          <button id="login" type="button" class="btn btn-lg btn-primary">Log In</button>
+        </div>-->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Sign Up Modal -->
+<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Sign Up for Foodie</h4>
+      </div>
+      <div class="modal-body">
+        <div id="signup-container">
+          <!--<input class="form-control" type="email" autofocus="" required="" placeholder="Email">-->
+          <!--<input class="form-control" type="password" required="" placeholder="Password">-->
+          <div id="signup-errors" class="alert alert-danger" role="alert" style="display:none;"></div>
+          <form class="form-signin" role="form">
+            <div class="user_name">
+              <input id="signup-name" class="form-control" type="text" autofocus="" placeholder="Name">
+            </div>
+            <div class="user_email">
+              <input id="signup-email" class="form-control" type="email" autofocus="" required="" placeholder="Email">
+            </div>
+            <div class="user_password">
+              <input id="signup-password" class="form-control" type="password" required="" placeholder="Password">
+            </div>
+            <button id="signup" class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+          </form>
+        </div>
+        <!--<div>
+          <button id="login" type="button" class="btn btn-lg btn-primary">Log In</button>
+        </div>-->
+      </div>
+    </div>
+  </div>
+</div>

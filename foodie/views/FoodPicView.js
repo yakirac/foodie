@@ -45,7 +45,8 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
                   });
               }
 
-              var data = { fileSource : this.model.get('file')._url,
+              var data = { id : this.model.get('id'),
+                           fileSource : this.model.get('file')._url,
                            caption : this.model.get('caption'),
                            comments : comments,
                            likes : this.model.get('likes')
