@@ -1,7 +1,17 @@
 <p><a href="">[Back]</a></p>
-<span>Welcome <%=name%></span>
-<div id="logout">
+<!--<span>Welcome <%=name%></span>-->
+<!--<div id="logout">
   <button id="logout" type="button" class="btn btn-primary">Logout</button>
+</div>-->
+<div id="logout" class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="userMenu" data-toggle="dropdown">
+    <span class="glyphicon glyphicon-user"></span><%=name%><span class="caret"></span>
+  </button>
+  <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects <span class="caret"></span></a>-->
+  <ul class="dropdown-menu" role="menu">
+    <li><a href="#profile">My Profile</a></li>
+    <li><a href="#logout">Logout</a></li>
+  </ul>
 </div>
 <div id="pictures" class="row">
   <!--<div class="col-md-4">
@@ -34,13 +44,13 @@
   <span>Oh bummer! You do not have any photos. Upload one to start tracking your meals.</span>
 </div>
 
-<div class="button-bar">
+<!--<div class="button-bar">
 
   <button type="submit" id="photo-upload" class="btn btn-lg btn-primary">Upload a Photo</button>
 
 </div>
 
-<!-- Upload Modal -->
+Upload Modal
 <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -69,7 +79,7 @@
   </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
+Delete Confirmation Modal
 <div id="delConfModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -83,4 +93,4 @@
     </div>
     </div>
   </div>
-</div>
+</div>-->

@@ -24,6 +24,8 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
               //bind methods to listen to and set THIS as the context
               _.bindAll( this, 'render', 'close');
 
+              this.currentUser = Parse.User.current();
+
 
             },
 
@@ -46,6 +48,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
               }
 
               var data = { id : this.model.get('id'),
+                           name : this.currentUser ? this.currentUser.get('name') : 'Guest',
                            fileSource : this.model.get('file')._url,
                            caption : this.model.get('caption'),
                            comments : comments,

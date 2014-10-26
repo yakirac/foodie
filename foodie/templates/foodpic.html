@@ -1,6 +1,16 @@
 <p><a href="#loadpics">[Back]</a></p>
-<div id="logout">
+<!--<div id="logout">
   <a href="#logout"><button id="logout" type="button" class="btn btn-primary">Logout</button></a>
+</div>-->
+<div id="logout" class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="userMenu" data-toggle="dropdown">
+    <span class="glyphicon glyphicon-user"></span><%=name%><span class="caret"></span>
+  </button>
+  <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">Projects <span class="caret"></span></a>-->
+  <ul class="dropdown-menu" role="menu">
+    <li><a href="#profile">My Profile</a></li>
+    <li><a href="#logout">Logout</a></li>
+  </ul>
 </div>
 <div>
   <p>

@@ -73,8 +73,8 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
               Parse.User.logIn(email, password, {
                 success : function( user ){
                   console.log('Login Successful', user);
-                  this.$('#loginModal').modal('hide');
                   bootstrap.router.navigate('loadpics', { trigger : true });
+                  this.$('#loginModal').modal('hide');
                 },
                 error : function( user, error ){
                   console.log('There was an error logging in', error);
@@ -82,6 +82,8 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
                   $('#login-errors').show();
                 }
               });
+
+              event.preventDefault();
             },
             signup : function( event )
             {
@@ -90,7 +92,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
               var email = $('input#signup-email').val();
               var password = $('input#signup-password').val();
 
-              var user = new Parse.User({ "name" : name,  "username" : email, "password" : password });
+              var user = new Parse.User({ 'name' : name,  'username' : email, 'password' : password, 'email' : email });
 
               console.log('Name', name);
               console.log('Email', email);
@@ -101,8 +103,8 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
               user.signUp(null, {
                 success : function( user ){
                   console.log('The user has been signed up', user);
-                  this.$('#signUpModal').modal('hide');
                   bootstrap.router.navigate('loadpics', { trigger : true });
+                  this.$('#signUpModal').modal('hide');
                 },
                 error : function( user, error ){
                   console.log('There was an error sigining up the user', error);
@@ -110,6 +112,8 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
                   $('#signup-errors').show();
                 }
               });
+
+              event.preventDefault();
             }
         });
 

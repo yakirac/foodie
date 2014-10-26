@@ -1,10 +1,9 @@
-define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meals",
-"collections/FoodieFiles", "models/FoodieFile", "text!templates/foodpics.html",
+define([ "jquery", "underscore", "backbone", "parse", "vague",
+"text!templates/profileView.html", "text!templates/comment.html",
 "text!templates/picture.html", "jquery.ui.widget",
 "jquery.iframe-transport", "jquery.fileupload"],
 
-    function( $, _, Backbone, Parse, Vague, FoodieFiles, FoodieFile,
-      Meals, template, pictureTemplate ){
+    function( $, _, Backbone, Parse, Vague, template, commentTemplate, pictureTemplate ){
 
       var bootstrap = SP.app.bootstrap;
 
@@ -19,43 +18,57 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
 
               this.options = options;
 
+              this.savedMeals = this.options.userMealCollection;
+
+              console.log(this.savedMeals);
+
               //bind methods to listen to and set THIS as the context
               _.bindAll( this, 'render', 'close');
 
-              this.inProfileView = false;
-              this.savedMeals = this.options.mealCollection;
-
               this.FoodieMeal = Parse.Object.extend("Meal");
-
-              //this.savedMeals = new Meals(bootstrap.images.files);
 
               this.currentUser = Parse.User.current();
 
-              this.$el.html( _.template( template, { name : this.currentUser ? this.currentUser.get('name') : 'Guest' } ) );
+              this.inProfileView = true;
 
-              //this.render();
+              //this.savedMeals = [];
+
 
             },
 
             // View Event Handlers
             events: {
-              'click #photo-upload' : 'openUploadModal',
-              'click #uploader'     : 'openFileBrowser',
-              'change #fileupload'  : 'uploadPhoto',
-              'click #save'         : 'uploadMeal',
-              'click #delete'       : 'confirmDelete',
-              'click #ok'           : 'deletePhoto',
-              'click #favorite'     : 'addRemoveFavorite',
-              'click #logout'       : 'logout'
+              'click #profile-uploads'  : 'loadProfileSection',
+              'click #profile-settings' : 'loadProfileSection',
+              'click #save-changes'     : 'saveProfile',
+              'click #photo-upload'     : 'openUploadModal',
+              'click #uploader'         : 'openFileBrowser',
+              'change #fileupload'      : 'uploadPhoto',
+              'click #save'             : 'uploadMeal',
+              'click #delete'           : 'confirmDelete',
+              'click #ok'               : 'deletePhoto',
+              'click #reset-password'   : 'resetPassword'
             },
 
             render: function() {
-              var self = this;
 
+              this.$el.empty();
+
+              var data = { name : this.currentUser ? this.currentUser.get('name') : 'Guest' };
+
+              this.$el.html( _.template( template, data ) );
+
+              this.renderUploads();
+
+              return this;
+            },
+
+            renderUploads : function()
+            {
               if(this.savedMeals.length > 0)
               {
                 $('#pictures').empty();
-                this.$el.find('#no-photos').hide();
+                this.$el.find('#no-uploads').hide();
                 console.log(this.savedMeals);
 
                 _.each(this.savedMeals.models, function(meal, idx){
@@ -69,12 +82,8 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
               }
               else
               {
-                console.log('Showing the alert');
-                $('#no-photos').show();
+                $('#no-uploads').show();
               }
-
-
-              return this;
             },
 
             close: function()
@@ -82,7 +91,54 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
               this.unbind();
               //this.remove();
             },
+            loadProfileSection : function( event )
+            {
+              var section = event.currentTarget.id;
+              var sectionActions = { 'profile-uploads' : { 'profile-uploads' : 'show', 'profile-settings' : 'hide' },
+                                     'profile-settings' : { 'profile-uploads' : 'hide', 'profile-settings' : 'show' }
+                                   };
+              //var actions = sectionActions[ section ];
 
+              this.$('.profile-uploads')[ sectionActions[ section ]['profile-uploads'] ]();
+              this.$('.profile-settings')[ sectionActions[ section ]['profile-settings'] ]();
+
+              if( section == 'profile-settings' )
+              {
+                this.$('input#name').val(this.currentUser.get('name'));
+                this.$('input#email').val(this.currentUser.get('username'));
+                //this.$('input#password').val(this.currentUser.get('password'));
+              }
+            },
+            saveProfile : function( event )
+            {
+              console.log('Saving the profile settings changes');
+              this.currentUser.set('name', this.$('input#name').val());
+              this.currentUser.set('username', this.$('input#email').val());
+
+              this.currentUser.save(null, {
+                success : function( user ){
+                  console.log('User settings saved', user);
+                  this.$('#settings-success').show();
+                  this.$('#settings-errors').hide();
+                },
+                error : function( user, error ){
+                  console.log('There was an error saving the user settings');
+                  this.$('#settings-success').hide();
+                  this.$('#settings-errors').show();
+                }
+              });
+            },
+            resetPassword : function( event ){
+              Parse.User.requestPasswordReset( this.currentUser.get('email'), {
+                success: function() {
+                  // Password reset request was sent successfully
+                },
+                error: function(error) {
+                  // Show the error message somewhere
+                  alert("Error: " + error.code + " " + error.message);
+                }
+              });
+            },
             openUploadModal : function( event )
             {
               console.log('Opening the modal on this click', event);
@@ -125,20 +181,26 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
             uploadMeal : function( event ){
               var self = this;
               var caption = $('#caption').val();
-              var newMeal = new this.FoodieMeal({ file : this.parseFile, caption : caption });
+              var newMeal = new this.FoodieMeal({ user_id : this.currentUser.id, file : this.parseFile, caption : caption });
               console.log( newMeal );
               newMeal.save().then(function(){
                 console.log('The FoodieFile object was saved successfully', newMeal);
 
-                if($('#no-photos').is(":visible"))
+                if($('#no-uploads').is(":visible"))
                 {
-                  $('#no-photos').hide();
+                  $('#no-uploads').hide();
                 }
                 var newModel = self.savedMeals.add( newMeal );
 
+                console.log('Appending the new meal');
+
                 $('#pictures').append(_.template(pictureTemplate, { cid : newMeal.id, fileSource : self.parseFile._url, caption : newMeal.get('caption') }));
 
+                console.log('New meal appended. Hiding the modal');
+
                 this.$('#uploadModal').modal('hide');
+
+                console.log('Modal hidden');
 
               }, function( error ){
                 console.log('There was an error saving the FoodieFile', error);
@@ -161,43 +223,9 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
               mealModel.destroy();
               this.savedMeals.remove( mealModel );
 
-              this.render();
+              this.renderUploads();
 
               //this.$('div#' + divModel).remove();
-            },
-            addRemoveFavorite : function( event ){
-              var $elem = $(event.currentTarget),
-                  divModel = $elem.data('model'),
-                  mealModel = this.savedMeals.get( divModel );
-
-              var likes = mealModel.get('favorites');
-
-              if(!this.inProfileView && this.currentUser)
-              {
-                  if(!_.contains(likes, this.currentUser.id))
-                  {
-                    //likes.push( this.currentUser.id );
-                    mealModel.add("favorites", this.currentUser.id);
-                    mealModel.save();
-                    //Call if adding like for user
-                    $elem.find('span').removeClass('glyphicon-star-empty').addClass('glyphicon-star');
-                    $elem.find('span#fave-count').html(likes.length);
-                  }
-                  else
-                  {
-                    //likes.push( this.currentUser.id );
-                    mealModel.remove("favorites", this.currentUser.id);
-                    mealModel.save();
-                    //Call if removing like for user
-                    $elem.removeClass('glyphicon-star').addClass('glyphicon-star-empty').removeClass('glyphicon-star');
-                    $elem.find('span#fave-count').html(likes.length);
-                  }
-              }
-            },
-            logout : function( event )
-            {
-              Parse.User.logOut();
-              bootstrap.router.navigate('#', { trigger : true });
             }
         });
 

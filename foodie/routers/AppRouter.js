@@ -4,14 +4,14 @@
 // use best practices with the routes. NO biz/application logic should be performed in this file
 //----------------------------
 define([
-	"jquery", "underscore", "backbone", "parse", "collections/Meals",
+	"jquery", "underscore", "backbone", "parse", "collections/Meals", "collections/UserMeals",
 	"views/HeaderView", "views/MainAppView", "views/AboutView", "views/FoodPicsView",
-	"views/FoodPicView", "views/MainMarionetteApp"
+	"views/FoodPicView", "views/ProfileView", "views/MainMarionetteApp"
 	],
 
     function(
-    	$, _, Backbone, Parse, Meals, HeaderView, MainAppView, AboutView,
-			FoodPicsView, FoodPicView, MarionetteApp
+    	$, _, Backbone, Parse, Meals, UserMeals, HeaderView, MainAppView,
+			AboutView, FoodPicsView, FoodPicView, ProfileView, MarionetteApp
     )
     {
 
@@ -51,6 +51,7 @@ define([
             {
                 ''								: 'index',		//main loader route
                 //'about'						: 'about',
+								'profile'					: 'profile',
 								'loadpics'				: 'loadpics',
 								'loadpic/:id'			: 'loadpic',
 								'logout'					: 'logout',
@@ -81,6 +82,18 @@ define([
 
             	this.currentView.render();
             },*/
+						profile : function()
+						{
+							if(!this.parseInitialized) this.parseInitialized = this.initializeParse();
+
+							var userMeals = new UserMeals();
+							userMeals.fetch().always(function(){
+								var profileView = new ProfileView({ userMealCollection : userMeals });
+
+								foodieApp.mainRegion.show(profileView);
+							});
+
+						},
 						loadpics : function()
 						{
 							/*$( '#app-holder' ).empty();
@@ -117,6 +130,8 @@ define([
 						{
 							console.log('Logging out');
 							if(!this.parseInitialized) this.parseInitialized = this.initializeParse();
+
+							Parse.User.logOut();
 
 							var mainView = new MainAppView();
 
