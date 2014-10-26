@@ -105,7 +105,8 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
               if( section == 'profile-settings' )
               {
                 this.$('input#name').val(this.currentUser.get('name'));
-                this.$('input#email').val(this.currentUser.get('username'));
+                this.$('input#username').val(this.currentUser.get('username'));
+                this.$('input#email').val(this.currentUser.get('email'));
                 //this.$('input#password').val(this.currentUser.get('password'));
               }
             },
@@ -113,7 +114,8 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
             {
               console.log('Saving the profile settings changes');
               this.currentUser.set('name', this.$('input#name').val());
-              this.currentUser.set('username', this.$('input#email').val());
+              this.currentUser.set('username', this.$('input#username').val());
+              this.currentUser.set('email', this.$('input#email').val());
 
               this.currentUser.save(null, {
                 success : function( user ){
