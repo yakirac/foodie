@@ -52,7 +52,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
                            fileSource : this.model.get('file')._url,
                            caption : this.model.get('caption'),
                            comments : comments,
-                           likes : this.model.get('likes')
+                           likes : this.model.get('likes').length
                          };
 
               this.$el.html( _.template( template, data ) );

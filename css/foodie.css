@@ -12,6 +12,14 @@
   /*filter: blur(5px);*/
 }
 
+.right{
+  float: right;
+}
+
+.left{
+  float: left;
+}
+
 .container{
   display: table;
 }
@@ -169,4 +177,28 @@ div#signUpModal .modal-dialog{
 
 .user_password{
   margin-bottom: 35px;
+}
+
+span.caret.user{
+  display: inline;
+}
+
+div.row.pics{
+  margin-top: 10px;
+}
+
+div.profile-uploads, div.profile-settings{
+  margin-top: 10px;
+}
+
+div#post-settings{
+  padding: 5px 0;
+}
+
+div#reset{
+  padding-top: 5px;
+}
+
+label.input-label{
+  padding-left: 5px;
 }

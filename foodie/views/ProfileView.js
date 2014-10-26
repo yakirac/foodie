@@ -20,8 +20,6 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
 
               this.savedMeals = this.options.userMealCollection;
 
-              console.log(this.savedMeals);
-
               //bind methods to listen to and set THIS as the context
               _.bindAll( this, 'render', 'close');
 
@@ -58,6 +56,13 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
 
               this.$el.html( _.template( template, data ) );
 
+              if(!this.currentUser)
+              {
+                this.$('#user-list').hide();
+                this.$('#profile').hide();
+                this.$('#no-profile-show').show();
+              }
+
               this.renderUploads();
 
               return this;
@@ -69,12 +74,11 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
               {
                 $('#pictures').empty();
                 this.$el.find('#no-uploads').hide();
-                console.log(this.savedMeals);
-
                 _.each(this.savedMeals.models, function(meal, idx){
                   var data = { cid : meal.id,
                                fileSource : meal.get('file')._url,
                                caption : meal.get('caption'),
+                               likes : !_.isUndefined(meal.get('likes')) ? meal.get('likes').length : '',
                                profileView : this.inProfileView
                              };
                   this.$el.find('#pictures').append(_.template(pictureTemplate, data ));
@@ -82,7 +86,8 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
               }
               else
               {
-                $('#no-uploads').show();
+                console.log('Showing the alert');
+                this.$('#no-uploads').show();
               }
             },
 
@@ -107,7 +112,10 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
                 this.$('input#name').val(this.currentUser.get('name'));
                 this.$('input#username').val(this.currentUser.get('username'));
                 this.$('input#email').val(this.currentUser.get('email'));
-                //this.$('input#password').val(this.currentUser.get('password'));
+                if(this.currentUser.get('privatePosts'))
+                  this.$('input#private-posts').attr('checked', 'checked');
+                else
+                  this.$('input#private-posts').removeAttr('checked');
               }
             },
             saveProfile : function( event )
@@ -116,6 +124,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
               this.currentUser.set('name', this.$('input#name').val());
               this.currentUser.set('username', this.$('input#username').val());
               this.currentUser.set('email', this.$('input#email').val());
+              this.currentUser.set('privatePosts', this.$('input#private-posts').is(":checked") ? true : false);
 
               this.currentUser.save(null, {
                 success : function( user ){
@@ -183,7 +192,9 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
             uploadMeal : function( event ){
               var self = this;
               var caption = $('#caption').val();
-              var newMeal = new this.FoodieMeal({ user_id : this.currentUser.id, file : this.parseFile, caption : caption });
+              var newMeal = new this.FoodieMeal({ user_id : this.currentUser.id, file : this.parseFile, caption : caption, ACL : this.currentUser.get('privatePosts') ? new Parse.ACL( this.currentUser ) : undefined });
+              if(this.currentUser.get('privatePosts'))
+                newMeal.setACL(new Parse.ACL( this.currentUser ));
               console.log( newMeal );
               newMeal.save().then(function(){
                 console.log('The FoodieFile object was saved successfully', newMeal);
@@ -194,9 +205,12 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
                 }
                 var newModel = self.savedMeals.add( newMeal );
 
-                console.log('Appending the new meal');
+                console.log('Appending the new meal', self);
+                var temp = _.template(pictureTemplate, { cid : newMeal.id, fileSource : self.parseFile._url, caption : newMeal.get('caption') });
 
-                $('#pictures').append(_.template(pictureTemplate, { cid : newMeal.id, fileSource : self.parseFile._url, caption : newMeal.get('caption') }));
+                console.log('Template created');
+
+                self.$('#pictures').append('New Meal here...');
 
                 console.log('New meal appended. Hiding the modal');
 
@@ -209,8 +223,9 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
               });
             },
 
-            confirmDelete : function()
+            confirmDelete : function( event )
             {
+              this.photoToDelete = event;
               this.$('#delConfModal').modal({ show : true });
             },
 
@@ -218,7 +233,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
             {
               this.$('#delConfModal').modal('hide');
 
-              var $elem = $(event.currentTarget),
+              var $elem = $(this.photoToDelete.currentTarget),
                   divModel = $elem.data('model'),
                   mealModel = this.savedMeals.get( divModel );
 
