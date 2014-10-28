@@ -87,6 +87,7 @@ define([
 							if(!this.parseInitialized) this.parseInitialized = this.initializeParse();
 
 							var userMeals = new UserMeals();
+							userMeals.query = (new Parse.Query(userMeals.model)).equalTo("user_id", !_.isNull(Parse.User.current()) ? Parse.User.current().id : '' );
 							userMeals.fetch().always(function(){
 								var profileView = new ProfileView({ userMealCollection : userMeals });
 

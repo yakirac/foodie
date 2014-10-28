@@ -4,14 +4,14 @@ define([ "jquery", "underscore", "backbone", "parse", "models/Meal"],
 
       var bootstrap = SP.app.bootstrap;
 
-      Parse.initialize("ibJOzxIQ10DOycHb9iFMxy0JuJsaDdOgnZyvdXVu",
-      "EHZVNuL1pWqIi1BOQn1z7UprtbvvqTBkUBNmv8ia");
+      /*Parse.initialize("ibJOzxIQ10DOycHb9iFMxy0JuJsaDdOgnZyvdXVu",
+      "EHZVNuL1pWqIi1BOQn1z7UprtbvvqTBkUBNmv8ia");*/
+
+      //console.log('UserMeals user', Parse.User.current());
 
       //ParseCollection
       var Collection = Parse.Collection.extend({
         model : Meal,
-
-        query : (new Parse.Query(Meal)).equalTo("user_id", !_.isNull(Parse.User.current()) ? Parse.User.current().id : '' ),
 
         deleteMeal : function( model )
         {

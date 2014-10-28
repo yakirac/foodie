@@ -59,11 +59,11 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
                   console.log(this.savedMeals);
 
                   _.each(this.savedMeals.models, function(meal, idx){
-                    var likesLength = !_.isUndefined(meal.get('favorites')) ? meal.get('favorites').length : '';
+                    var likesLength = !_.isUndefined(meal.get('favorites')) || !_.isEmpty(meal.get('favorites')) ? meal.get('favorites').length : '';
                     var data = { cid : meal.id,
                                  fileSource : meal.get('file')._url,
                                  caption : meal.get('caption'),
-                                 likes : likesLength == 0 ? '' : likesLength,
+                                 favorites : likesLength == 0 ? '' : likesLength,
                                  profileView : this.inProfileView
                                };
                     var acl = meal.getACL();
@@ -210,7 +210,8 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "collections/Meal
             },
             logout : function( event )
             {
-              Parse.User.logOut();
+              console.log('Calling logout');
+              //Parse.User.logOut();
               bootstrap.router.navigate('#', { trigger : true });
             }
         });

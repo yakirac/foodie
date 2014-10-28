@@ -46,6 +46,14 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
       				this.$el.html( _.template( template, {} ) );
 
 
+              this.$('#loginModal').on('hidden.bs.modal', function( event ){
+                  bootstrap.router.navigate('loadpics', { trigger : true });
+              });
+
+              this.$('#signUpModal').on('hidden.bs.modal', function( event ){
+                  bootstrap.router.navigate('loadpics', { trigger : true });
+              });
+
       				return this;
             },
             close: function()
@@ -70,14 +78,18 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
               console.log('Email', email);
               console.log('Password', password);
 
+              this.$('#loading').show();
+
               Parse.User.logIn(email, password, {
                 success : function( user ){
                   console.log('Login Successful', user);
-                  bootstrap.router.navigate('loadpics', { trigger : true });
+                  this.$('#loading').hide();
+                  //bootstrap.router.navigate('loadpics', { trigger : true });
                   this.$('#loginModal').modal('hide');
                 },
                 error : function( user, error ){
                   console.log('There was an error logging in', error);
+                  this.$('#loading').hide();
                   $('#login-errors').html("Email/Password combination is invalid");
                   $('#login-errors').show();
                 }
@@ -103,7 +115,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
               user.signUp(null, {
                 success : function( user ){
                   console.log('The user has been signed up', user);
-                  bootstrap.router.navigate('loadpics', { trigger : true });
+                  //bootstrap.router.navigate('loadpics', { trigger : true });
                   this.$('#signUpModal').modal('hide');
                 },
                 error : function( user, error ){

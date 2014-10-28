@@ -78,7 +78,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
                   var data = { cid : meal.id,
                                fileSource : meal.get('file')._url,
                                caption : meal.get('caption'),
-                               likes : !_.isUndefined(meal.get('likes')) ? meal.get('likes').length : '',
+                               favorites : !_.isUndefined(meal.get('favorites')) || !_.isEmpty(meal.get('favorites')) ? meal.get('favorites').length : '',
                                profileView : this.inProfileView
                              };
                   this.$el.find('#pictures').append(_.template(pictureTemplate, data ));
@@ -206,15 +206,22 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
                 var newModel = self.savedMeals.add( newMeal );
 
                 console.log('Appending the new meal', self);
-                var temp = _.template(pictureTemplate, { cid : newMeal.id, fileSource : self.parseFile._url, caption : newMeal.get('caption') });
+                var data = { cid : newMeal.id,
+                             fileSource : self.parseFile._url,
+                             favorites : !_.isUndefined(newMeal.get('favorites')) ? newMeal.get('favorites').length : '',
+                             caption : newMeal.get('caption'),
+                             profileView : self.inProfileView
+                           };
+
+                var temp = _.template(pictureTemplate, data );
 
                 console.log('Template created');
 
-                self.$('#pictures').append('New Meal here...');
+                self.$('#pictures').append( temp );
 
                 console.log('New meal appended. Hiding the modal');
 
-                this.$('#uploadModal').modal('hide');
+                self.$('#uploadModal').modal('hide');
 
                 console.log('Modal hidden');
 
