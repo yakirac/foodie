@@ -26,7 +26,7 @@
   </div>
 
   <div class="profile-uploads">
-    <div id="pictures" class="row">
+    <div id="profile-pictures" class="row">
     </div>
     <div id="no-uploads" class="alert alert-info" role="alert" style="display:none;">
       <span>Oh bummer! You do not have any photos. Upload one to start tracking your meals.</span>
@@ -47,8 +47,11 @@
             <h4 class="modal-title" id="myModalLabel">Upload a Photo</h4>
           </div>
           <div class="modal-body">
+            <div id="upload-success" class="alert alert-success" role="alert" style="display:none;">Photo successfully saved</div>
+            <div id="upload-errors" class="alert alert-danger" role="alert" style="display:none;">There was an error saving your photo</div>
             <div class="modal-image">
               <span class="preview">
+                <div id="loading" style="display:none;"><img src="/images/loader.gif" class="loading-indicator upload"/></div>
                 <img id="modal-image" alt="200x200" class="img-thumbnail" data-src="holder.js/200x200" style="width: 200px; height: 200px;" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4=">
               </span>
               <span class="modal-caption">
@@ -90,6 +93,7 @@
         <div id="settings-success" class="alert alert-success" role="alert" style="display:none;">Profile settings successfully saved</div>
         <div id="settings-errors" class="alert alert-danger" role="alert" style="display:none;">There was an error saving your settings</div>
         <form class="form-signin" role="form">
+          <div id="loading-settings" style="display:none;"><img src="/images/loader.gif" class="loading-indicator settings"/></div>
           <div class="user_name">
             <input id="name" class="form-control" type="text" autofocus="" placeholder="Name">
           </div>

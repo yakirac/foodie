@@ -47,11 +47,13 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
 
 
               this.$('#loginModal').on('hidden.bs.modal', function( event ){
-                  bootstrap.router.navigate('loadpics', { trigger : true });
+                  //if(event.currentTarget.id == 'login')
+                    bootstrap.router.navigate('loadpics', { trigger : true });
               });
 
               this.$('#signUpModal').on('hidden.bs.modal', function( event ){
-                  bootstrap.router.navigate('loadpics', { trigger : true });
+                  //if(event.currentTarget.id == 'signup')
+                    bootstrap.router.navigate('loadpics', { trigger : true });
               });
 
       				return this;
@@ -71,6 +73,10 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
             },
             login : function( event )
             {
+              //console.log(event.keyCode);
+              //if(event.which == 13 || event.which == 1 || event.which == 27) return;
+
+              var self = this;
               console.log('Logging you in');
               var email = $('input#login-email').val();
               var password = $('input#login-password').val();
@@ -83,15 +89,14 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
               Parse.User.logIn(email, password, {
                 success : function( user ){
                   console.log('Login Successful', user);
-                  this.$('#loading').hide();
                   //bootstrap.router.navigate('loadpics', { trigger : true });
                   this.$('#loginModal').modal('hide');
                 },
                 error : function( user, error ){
                   console.log('There was an error logging in', error);
-                  this.$('#loading').hide();
                   $('#login-errors').html("Email/Password combination is invalid");
                   $('#login-errors').show();
+                  self.$('#loading').hide();
                 }
               });
 
@@ -99,6 +104,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
             },
             signup : function( event )
             {
+              var self = this;
               console.log('Signing you up');
               var name = $('input#signup-name').val();
               var email = $('input#signup-email').val();
@@ -111,6 +117,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
               console.log('Password', password);
               console.log('User', user);
 
+              this.$('#loading-signup').show();
 
               user.signUp(null, {
                 success : function( user ){
@@ -122,6 +129,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
                   console.log('There was an error sigining up the user', error);
                   $('#signup-errors').html(error.message);
                   $('#signup-errors').show();
+                  self.$('#loading-signup').hide();
                 }
               });
 

@@ -72,7 +72,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
             {
               if(this.savedMeals.length > 0)
               {
-                $('#pictures').empty();
+                $('#profile-pictures').empty();
                 this.$el.find('#no-uploads').hide();
                 _.each(this.savedMeals.models, function(meal, idx){
                   var data = { cid : meal.id,
@@ -81,7 +81,7 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
                                favorites : !_.isUndefined(meal.get('favorites')) || !_.isEmpty(meal.get('favorites')) ? meal.get('favorites').length : '',
                                profileView : this.inProfileView
                              };
-                  this.$el.find('#pictures').append(_.template(pictureTemplate, data ));
+                  this.$el.find('#profile-pictures').append(_.template(pictureTemplate, data ));
                 }.bind(this));
               }
               else
@@ -102,7 +102,6 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
               var sectionActions = { 'profile-uploads' : { 'profile-uploads' : 'show', 'profile-settings' : 'hide' },
                                      'profile-settings' : { 'profile-uploads' : 'hide', 'profile-settings' : 'show' }
                                    };
-              //var actions = sectionActions[ section ];
 
               this.$('.profile-uploads')[ sectionActions[ section ]['profile-uploads'] ]();
               this.$('.profile-settings')[ sectionActions[ section ]['profile-settings'] ]();
@@ -120,7 +119,8 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
             },
             saveProfile : function( event )
             {
-              console.log('Saving the profile settings changes');
+              var self = this;
+              this.$('#loading-settings').show();
               this.currentUser.set('name', this.$('input#name').val());
               this.currentUser.set('username', this.$('input#username').val());
               this.currentUser.set('email', this.$('input#email').val());
@@ -128,14 +128,15 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
 
               this.currentUser.save(null, {
                 success : function( user ){
-                  console.log('User settings saved', user);
-                  this.$('#settings-success').show();
-                  this.$('#settings-errors').hide();
+                  self.$('#settings-success').show();
+                  self.$('#settings-errors').hide();
+                  self.$('#loading-settings').hide();
                 },
                 error : function( user, error ){
                   console.log('There was an error saving the user settings');
-                  this.$('#settings-success').hide();
-                  this.$('#settings-errors').show();
+                  self.$('#settings-success').hide();
+                  self.$('#settings-errors').show();
+                  self.$('#loading-settings').hide();
                 }
               });
             },
@@ -152,8 +153,6 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
             },
             openUploadModal : function( event )
             {
-              console.log('Opening the modal on this click', event);
-
               this.$('#uploadModal').modal({ show : true });
 
               event.preventDefault();
@@ -165,8 +164,10 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
 
             uploadPhoto : function( event )
             {
+              this.$('#loading').show();
+
               var self = this;
-              console.log('Uploading the photo on this click', event);
+
               var files = this.$('#fileupload')[0].files;
 
               var file = files[0];
@@ -176,36 +177,35 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
               this.parseFile = new Parse.File(name, file);
 
               this.parseFile.save().then(function(){
-                console.log('The file was saved', self.parseFile);
-
                 $('#modal-image').attr('src', '' + self.parseFile._url + '');
-                //$('#pictures').append(_.template(pictureTemplate, { cid : newModel.cid, fileSource : this.parseFile.get('fileData')._url }));
+
                 $('#save').removeClass('disabled');
+
+                self.$('#loading').hide();
 
               }, function( error ){
                   console.log('There was an error saving the file', error);
+                  self.$('#loading').hide();
+                  self.$('#upload-errors').hide();
               });
 
               event.preventDefault();
             },
 
             uploadMeal : function( event ){
+              this.$('#loading').show();
               var self = this;
               var caption = $('#caption').val();
               var newMeal = new this.FoodieMeal({ user_id : this.currentUser.id, file : this.parseFile, caption : caption, ACL : this.currentUser.get('privatePosts') ? new Parse.ACL( this.currentUser ) : undefined });
               if(this.currentUser.get('privatePosts'))
                 newMeal.setACL(new Parse.ACL( this.currentUser ));
-              console.log( newMeal );
               newMeal.save().then(function(){
-                console.log('The FoodieFile object was saved successfully', newMeal);
 
                 if($('#no-uploads').is(":visible"))
-                {
                   $('#no-uploads').hide();
-                }
+
                 var newModel = self.savedMeals.add( newMeal );
 
-                console.log('Appending the new meal', self);
                 var data = { cid : newMeal.id,
                              fileSource : self.parseFile._url,
                              favorites : !_.isUndefined(newMeal.get('favorites')) ? newMeal.get('favorites').length : '',
@@ -215,18 +215,16 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
 
                 var temp = _.template(pictureTemplate, data );
 
-                console.log('Template created');
-
                 self.$('#pictures').append( temp );
-
-                console.log('New meal appended. Hiding the modal');
 
                 self.$('#uploadModal').modal('hide');
 
-                console.log('Modal hidden');
+                self.$('#loading').hide();
 
               }, function( error ){
                 console.log('There was an error saving the FoodieFile', error);
+                self.$('#loading').hide();
+                self.$('#upload-errors').hide();
               });
             },
 
@@ -248,8 +246,6 @@ define([ "jquery", "underscore", "backbone", "parse", "vague",
               this.savedMeals.remove( mealModel );
 
               this.renderUploads();
-
-              //this.$('div#' + divModel).remove();
             }
         });
 
