@@ -216,6 +216,7 @@ div#pictures{
 
 div#profile{
   margin-top: 20px;
+  display: inline-block;
 }
 
 div.row.pics{

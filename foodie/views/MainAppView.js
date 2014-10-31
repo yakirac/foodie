@@ -14,7 +14,9 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
 	            //var self = this.changePropName( this );
 
 	            //bind methods to listen to and set THIS as the context
-	            _.bindAll( this, 'render', 'close');
+	            _.bindAll( this, 'render', 'close', 'loadPics');
+
+              bootstrap.Vent.on('mainapp:loadpics', this.loadPics, this);
 
 
 				      this.render();
@@ -46,15 +48,20 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
       				this.$el.html( _.template( template, {} ) );
 
 
-              this.$('#loginModal').on('hidden.bs.modal', function( event ){
-                  //if(event.currentTarget.id == 'login')
+              /*this.$('#loginModal').on('hidden.bs.modal', function( event ){
+                  console.log(event);
+                  if(event.currentTarget.id == 'login')
                     bootstrap.router.navigate('loadpics', { trigger : true });
+              });
+
+              this.$('#loginModal').on('hide.bs.modal', function( event ){
+                  console.log(event.keyCode);
               });
 
               this.$('#signUpModal').on('hidden.bs.modal', function( event ){
                   //if(event.currentTarget.id == 'signup')
                     bootstrap.router.navigate('loadpics', { trigger : true });
-              });
+              });*/
 
       				return this;
             },
@@ -63,17 +70,23 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
             	this.unbind();
             	//this.remove();
             },
+            loadPics : function( data ){
+              $('.modal-backdrop').remove();
+              bootstrap.router.navigate('loadpics', { trigger : true });
+            },
             openLoginModal : function( event )
             {
-              this.$('#loginModal').modal({ show : true });
+              this.$('#loading').hide();
+              this.$('#loginModal').modal({ show : true, keyboard : false, backdrop : 'static' });
             },
             openSignUpModal : function( event )
             {
-              this.$('#signUpModal').modal({ show : true });
+              this.$('#loading-signup').hide();
+              this.$('#signUpModal').modal({ show : true, keyboard : false, backdrop : 'static' });
             },
             login : function( event )
             {
-              //console.log(event.keyCode);
+              //console.log(event);
               //if(event.which == 13 || event.which == 1 || event.which == 27) return;
 
               var self = this;
@@ -89,8 +102,9 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
               Parse.User.logIn(email, password, {
                 success : function( user ){
                   console.log('Login Successful', user);
-                  //bootstrap.router.navigate('loadpics', { trigger : true });
+
                   this.$('#loginModal').modal('hide');
+                  bootstrap.Vent.trigger('mainapp:loadpics');
                 },
                 error : function( user, error ){
                   console.log('There was an error logging in', error);
@@ -122,8 +136,9 @@ define([ "jquery", "underscore", "backbone", "parse", "vague", "text!templates/l
               user.signUp(null, {
                 success : function( user ){
                   console.log('The user has been signed up', user);
-                  //bootstrap.router.navigate('loadpics', { trigger : true });
+
                   this.$('#signUpModal').modal('hide');
+                  bootstrap.Vent.trigger('mainapp:loadpics');
                 },
                 error : function( user, error ){
                   console.log('There was an error sigining up the user', error);

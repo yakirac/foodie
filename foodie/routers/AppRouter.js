@@ -26,10 +26,10 @@ define([
 
                 //reference context
 								/*this.views 			= [];
-								this.currentView	= new MainAppView();
+								this.currentView	= new MainAppView();*/
 
 								//cache the vents object
-								bootstrap.Vent = _.extend({}, Backbone.Events );*/
+								bootstrap.Vent = _.extend({}, Backbone.Events );
 
 								//start up
 								Backbone.history.start();

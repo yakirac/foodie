@@ -1,4 +1,4 @@
-<div id="logout" class="dropdown">
+<div id="user-dropdown" class="dropdown">
   <button class="btn btn-default dropdown-toggle" type="button" id="userMenu" data-toggle="dropdown">
     <span class="glyphicon glyphicon-user"></span><%=name%><span class="caret"></span>
   </button>
@@ -9,13 +9,8 @@
   </ul>
 </div>
 
-<div id="no-profile-show" class="alert alert-info" role="alert" style="display:none;">
-  <span>You must be logged in to view this feature</span>
-</div>
-
 <div id="profile">
-  <div>
-    <div class="btn-group btn-group-justified">
+   <div class="btn-group btn-group-justified">
       <div class="btn-group">
         <button id="profile-uploads" type="button" class="btn btn-default">Uploads</button>
       </div>
@@ -23,11 +18,9 @@
         <button id="profile-settings" type="button" class="btn btn-default">Edit Profile</button>
       </div>
     </div>
-  </div>
 
   <div class="profile-uploads">
-    <div id="profile-pictures" class="row">
-    </div>
+    <div id="profile-pictures" class="row"></div>
     <div id="no-uploads" class="alert alert-info" role="alert" style="display:none;">
       <span>Oh bummer! You do not have any photos. Upload one to start tracking your meals.</span>
     </div>
@@ -82,10 +75,9 @@
             <button id="ok" type="button" class="btn btn-success">Ok</button>
           </div>
         </div>
-        </div>
       </div>
     </div>
-  </div>
+ </div>
 
   <div class="profile-settings" style="display:none;">
     <div class="panel panel-default">
@@ -117,4 +109,8 @@
       </div>
     </div>
   </div>
+</div>
+
+<div id="no-profile-show" class="alert alert-info" role="alert" style="display:none;">
+  <span>You must be logged in to view this feature</span>
 </div>
